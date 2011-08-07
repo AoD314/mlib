@@ -9,8 +9,8 @@
 namespace mlib
 {
         template <typename T>
-        std::string to_str(const T & t, size_t align = 0, size_t precision = 0, char c = '0')
-        {
+		std::string to_str(const T & t, size_t align = 0, size_t precision = 0, char c = ' ')
+		{
                 std::stringstream ss;
                 ss
                         << std::setiosflags(std::ios::fixed)

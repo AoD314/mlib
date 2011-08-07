@@ -17,8 +17,8 @@ int main(int argc, const char ** argv)
 	cout << "         i = |" << i << "|" << endl;
 	cout << "         d = |" << d << "|" << endl;
 
-	cout << " format(i) = |" << mlib::to_str(i, 10) << "|" << endl;
-	cout << " format(d) = |" << mlib::to_str(d, 10, 4, ' ') << "|" << endl;
+	cout << " format(i) = |" << mlib::to_str(i, 10, 0, '0') << "|" << endl;
+	cout << " format(d) = |" << mlib::to_str(d, 10, 4) << "|" << endl;
 
 	return 0;
 }

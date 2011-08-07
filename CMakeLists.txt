@@ -8,7 +8,13 @@ project( ${target} )
 include_directories("include")
 
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -msse4.1 -msse4.2 -fopenmp ")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Werror -Wextra ")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Werror -Wextra -pedantic ") 
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Weffc++ -Wconversion -Wsign-conversion ") 
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wold-style-cast -Wunreachable-code ")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Woverloaded-virtual -Wctor-dtor-privacy ")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize") 
+
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
 
 file(GLOB src_lib "src/*.cpp")
@@ -48,21 +54,14 @@ set(mlib_version "${MLIB_MAJOR_VERSION}.${MLIB_MINOR_VERSION}.${MLIB_SUBMINOR_VE
 
 if(BUILD_EXAMPLES)
 
-	set(ex1 "example_timer")
-	add_executable( ${ex1} "examples/example_timer.cpp" )
-	target_link_libraries( ${ex1} "mlib" )
+	file(GLOB examples_list "examples/*.cpp")
 
-	set(ex2 "example_convert")
-	add_executable( ${ex2} "examples/example_convert.cpp" )
-	target_link_libraries( ${ex2} "mlib" )
+	FOREACH(ex ${examples_list})
+		string(REGEX REPLACE "^.*/(.+).cpp" "\\1" ex_name ${ex})
+		add_executable( ${ex_name} ${ex} )
+		target_link_libraries( ${ex_name} "mlib" )
+	ENDFOREACH()
 
-	set(ex3 "example_console_parameters")
-	add_executable( ${ex3} "examples/example_console_parameters.cpp" )
-	target_link_libraries( ${ex3} "mlib" )
-
-	set(ex4 "example_progress_bar")
-	add_executable( ${ex4} "examples/example_progress_bar.cpp" )
-	target_link_libraries( ${ex4} "mlib" )
 endif()
 # ----------------------------------------------------------------------------
 
@@ -82,6 +81,7 @@ message("")
 message("General configuration for mlib ${mlib_version} =====================================")
 message("")
 message("    Build all examples: " ${BUILD_EXAMPLES})
+message("    Configuration type: " ${CMAKE_BUILD_TYPE})
 message("")
 
 # ----------------------------------------------------------------------------

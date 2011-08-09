@@ -12,8 +12,7 @@ namespace mlib
 	void Logger::log(std::string msg)
 	{
 		std::fstream file(file_name.c_str(), std::ios::app | std::ios::out);
-		std::string date_time = DateTime::now();
-		file << date_time << " " ;
+		file << to_str(DateTime::now()) << " ";
 		file << msg << std::endl;
 		file.close();
 	}

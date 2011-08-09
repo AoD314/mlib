@@ -2,7 +2,7 @@
 
 EAPI=3
 
-inherit base cmake-utils
+inherit base cmake-utils git
 
 CMAKE_MIN_VERSION="${CMAKE_MIN_VERSION:-2.8.1}"
 CMAKE_BUILD_DIR="${WORKDIR}"
@@ -10,16 +10,17 @@ BUILD_DIR="${WORKDIR}"
 
 DESCRIPTION="simple library on c++"
 HOMEPAGE="https://github.com/AoD314/mlib"
-SRC_URI="mlib-0.1.0.zip"
+#SRC_URI="mlib-0.1.0.zip"
+SRC_URI=""
+EGIT_REPO_URI="git://github.com/AoD314/mlib.git"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 ~x86"
 
-PROPERTIES="interactive"
+#PROPERTIES="interactive"
 
-#IUSE="examples"
-
+IUSE="examples"
 CMAKE_BUILD_TYPE="Release"
 
 S="${WORKDIR}"

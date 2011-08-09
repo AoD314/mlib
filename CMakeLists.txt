@@ -20,9 +20,8 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -pipe -fomit-frame-pointer "
 file(GLOB src_lib "src/*.cpp")
 file(GLOB inc_lib "include/mlib/*.hpp")
 
-add_library( ${target} ${src_lib} ${inc_lib})
+add_library( ${target} SHARED ${src_lib} ${inc_lib})
 target_link_libraries( ${target} "gomp" )
-
 
 # ----------------------------------------------------------------------------
 # CONFIGURE

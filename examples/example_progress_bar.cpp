@@ -18,7 +18,7 @@ int main(int argc, const char ** argv)
 	for (int i = 0; i <= max_value; i++)
 	{
 		double progress = static_cast<double>(i) / static_cast<double>(max_value);
-		std::string name = "  (CC)  super/mega_file_" + mlib::to_str(i, 3) + ".cpp";
+		std::string name = "  (CC)  super/mega_file_" + mlib::to_str(i, 3, 0, '0') + ".cpp";
 		mlib::progress_bar(progress, name);
 		sleep(1);
 	}

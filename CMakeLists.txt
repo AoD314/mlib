@@ -7,32 +7,34 @@ project( ${target} )
 
 include_directories("include")
 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -msse4.1 -msse4.2 -fopenmp ")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Werror -Wextra -pedantic ") 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Weffc++ -Wconversion -Wsign-conversion ") 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wold-style-cast -Wunreachable-code ")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Woverloaded-virtual -Wctor-dtor-privacy ")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize") 
+set(WARNING "-Wall -Werror -Wextra -Weffc++ -Wconversion -Wsign-conversion -Wold-style-cast ")
+set(WARNING "${WARNING} -Wunreachable-code -Woverloaded-virtual -Wctor-dtor-privacy ")
+set(CMAKE_CXX_FLAGS "-msse4.1 -msse4.2 ${WARNING}")
 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize") 
+
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 ")
 
 file(GLOB src_lib "src/*.cpp")
 file(GLOB inc_lib "include/mlib/*.hpp")
 
 add_library( ${target} SHARED ${src_lib} ${inc_lib})
-target_link_libraries( ${target} "gomp" )
+target_link_libraries( ${target} -lavcodec -lavformat )
 
 # ----------------------------------------------------------------------------
 # CONFIGURE
 # ----------------------------------------------------------------------------
 
-set(BUILD_EXAMPLES ON CACHE BOOL "Build all examples")
+#set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configs" FORCE)
-if(DEFINED CMAKE_BUILD_TYPE)
-	set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${CMAKE_CONFIGURATION_TYPES} )
-endif()
+#set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configs" FORCE)
+#if(DEFINED CMAKE_BUILD_TYPE)
+#	set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${CMAKE_CONFIGURATION_TYPES} )
+#endif()
 
 # ----------------------------------------------------------------------------
 
@@ -50,6 +52,8 @@ set(mlib_version "${MLIB_MAJOR_VERSION}.${MLIB_MINOR_VERSION}.${MLIB_SUBMINOR_VE
 # ----------------------------------------------------------------------------
 # EXAMPLES
 # ----------------------------------------------------------------------------
+
+set(BUILD_EXAMPLES ON CACHE BOOL "Build all examples")
 
 if(BUILD_EXAMPLES)
 
@@ -71,6 +75,7 @@ endif()
 install(TARGETS ${target} DESTINATION "/usr/lib")
 find_path(LIB_INCLUDE_PATH string.h)
 install(FILES ${inc_lib} DESTINATION "${LIB_INCLUDE_PATH}/mlib")
+
 # ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
@@ -79,8 +84,11 @@ install(FILES ${inc_lib} DESTINATION "${LIB_INCLUDE_PATH}/mlib")
 message("")
 message("General configuration for mlib ${mlib_version} =====================================")
 message("")
-message("    Build all examples: " ${BUILD_EXAMPLES})
-message("    Configuration type: " ${CMAKE_BUILD_TYPE})
+message("    Build all examples : " ${BUILD_EXAMPLES})
+message("    Configuration type : " ${CMAKE_BUILD_TYPE})
+message("")
+message("    C++ flags (Release): " ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE})
+message("    C++ flags (Debug)  : " ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG})
 message("")
 
 # ----------------------------------------------------------------------------

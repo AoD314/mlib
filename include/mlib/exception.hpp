@@ -14,8 +14,8 @@ namespace mlib
 
 		public:
 			Exception(std::string message, std::string file, unsigned long long line);
-			std::string message();
 
+			virtual const char * what() const throw();
 			~Exception() throw () {}
 	};
 

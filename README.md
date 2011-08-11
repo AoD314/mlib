@@ -8,6 +8,7 @@ Classes
 * Progress Bar
 * Logger
 * DateTime
+* Exception
 
 System Requirements
 -------------------

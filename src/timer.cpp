@@ -61,21 +61,30 @@ namespace mlib
 		return ret;
 	}
 
-	Timer::Timer(unsigned long long frequency, TimerModeCount mode)
-	{
-		reset();
-		mode_c = mode;
-		mode_p = inAll;
-		fr = frequency;
-	}
+	Timer::Timer(unsigned long long frequency, TimerModeCount mode) : 
+	    seconds_total(0.0), seconds_last(0.0), 
+	    seconds_min(std::numeric_limits<double>::max()),
+	    seconds_max(std::numeric_limits<double>::min()),
+	    fr(frequency),
+	    time_total(0), time_last(0), 
+	    time_min(std::numeric_limits<unsigned long long>::max()),
+	    time_max(std::numeric_limits<unsigned long long>::min()),
+	    count_time(0),
+	    time_edx(0), time_edx1(0), time_eax(0), time_eax1(0),
+	    mode_p(inAll), mode_c(mode){}
 
-	Timer::Timer(TimerModeCount mode)
-	{
-		reset();
-		mode_c = mode;
-		mode_p = inAll;
-		fr = Processor::get_frequency();
-	}
+	Timer::Timer(TimerModeCount mode):
+	    seconds_total(0.0), seconds_last(0.0), 
+	    seconds_min(std::numeric_limits<double>::max()),
+	    seconds_max(std::numeric_limits<double>::min()),
+	    fr(Processor::get_frequency()),
+	    time_total(0), time_last(0), 
+	    time_min(std::numeric_limits<unsigned long long>::max()),
+	    time_max(std::numeric_limits<unsigned long long>::min()),
+	    count_time(0),
+	    time_edx(0), time_edx1(0), time_eax(0), time_eax1(0),
+	    mode_p(inAll), mode_c(mode){}
+	    
 
 	unsigned long long Timer::get_frequency() const
 	{
@@ -183,14 +192,14 @@ namespace mlib
 		else if (t.mode_p == inAll)
 		{
 			double sec = t.get_total_time_in_seconds();
-			unsigned long long  timed = ( unsigned long long  ) sec / 86400;
-			sec -= timed * 86400;
+			unsigned long long timed = static_cast<unsigned long long>(sec) / 86400;
+			sec -= static_cast<double>(timed * 86400);
 
-			unsigned long long  timeh = ( unsigned long long ) sec / 3600;
-			sec -= timeh * 3600;
+			unsigned long long timeh = static_cast<unsigned long long>(sec) / 3600;
+			sec -= static_cast<double>(timeh * 3600);
 
-			unsigned long long timem = ( unsigned long long  ) sec / 60;
-			sec -= timem * 60;
+			unsigned long long timem = static_cast<unsigned long long>(sec) / 60;
+			sec -= static_cast<double>(timem * 60);
 
 			out << timed << " days " << timeh << "h  " << timem << "m  " << std::fixed << std::setprecision(10) << sec << "s";
 		}

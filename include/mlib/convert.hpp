@@ -9,7 +9,7 @@
 namespace mlib
 {
 	template <typename T>
-	std::string to_str(const T & t, size_t align = 0, size_t precision = 0, char c = ' ')
+	std::string to_str(const T & t, int align = 0, int precision = 0, char c = ' ')
 	{
 		std::stringstream ss;
 		ss

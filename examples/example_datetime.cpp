@@ -7,7 +7,7 @@
 using std::cout;
 using std::endl;
 
-int main(int argc, const char ** argv)
+int main(int, const char **)
 {
 	cout << "Date and Time now is : " << mlib::to_str(mlib::DateTime::now()) << endl;
 

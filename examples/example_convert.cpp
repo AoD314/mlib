@@ -7,7 +7,7 @@
 using std::cout;
 using std::endl;
 
-int main(int argc, const char ** argv)
+int main(int, const char **)
 {
 	std::string str = "  101.314614 ";
 

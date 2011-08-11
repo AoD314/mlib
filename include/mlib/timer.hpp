@@ -42,7 +42,7 @@ namespace mlib
 			unsigned long long count_time;
 
 			unsigned int time_edx, time_edx1;
-						unsigned int time_eax, time_eax1;
+			unsigned int time_eax, time_eax1;
 
 			TimerModePrint mode_p;
 			TimerModeCount mode_c;
@@ -55,23 +55,23 @@ namespace mlib
 			inline void start()
 			{
 				asm volatile (  "cpuid\n\t"
-						"rdtsc\n\t"
-						"mov %%edx, %0\n\t"
-						"mov %%eax, %1\n\t" : "=r"(time_edx), "=r"(time_eax) ::
-						"%rax", "%rbx", "%rcx", "%rdx");
+				                "rdtsc\n\t"
+				                "mov %%edx, %0\n\t"
+				                "mov %%eax, %1\n\t" : "=r"(time_edx), "=r"(time_eax) ::
+				                "%rax", "%rbx", "%rcx", "%rdx");
 			}
 
 			inline void stop ()
 			{
 				asm volatile (  "rdtscp\n\t"
-						"mov %%edx, %0\n\t"
-						"mov %%eax, %1\n\t"
-						"cpuid\n\t" : "=r"(time_edx1), "=r"(time_eax1) ::
-						"%rax", "%rbx", "%rcx", "%rdx");
+				                "mov %%edx, %0\n\t"
+				                "mov %%eax, %1\n\t"
+				                "cpuid\n\t" : "=r"(time_edx1), "=r"(time_eax1) ::
+				                "%rax", "%rbx", "%rcx", "%rdx");
 
 				time_last =
-							((unsigned long long)(time_edx1) << 32 | (unsigned long long)(time_eax1)) -
-							((unsigned long long)(time_edx)  << 32 | (unsigned long long)(time_eax));
+				            (static_cast<unsigned long long>(time_edx1) << 32 | static_cast<unsigned long long>(time_eax1)) -
+				            (static_cast<unsigned long long>(time_edx)  << 32 | static_cast<unsigned long long>(time_eax));
 				CalcSec();
 			}
 

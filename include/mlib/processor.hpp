@@ -11,7 +11,7 @@ namespace mlib
 	class Processor
 	{
 		public:
-			static unsigned long long get_optimal_threads();
+			static int get_number_of_cpus();
 			static unsigned long long get_frequency();
 
 			static bool supportSSE();
@@ -28,10 +28,10 @@ namespace mlib
 			static bool supportHT();
 
 
-			static bool is_set_N_bit_in_EAX(int bit);
-			static bool is_set_N_bit_in_EBX(int bit);
-			static bool is_set_N_bit_in_ECX(int bit);
-			static bool is_set_N_bit_in_EDX(int bit);
+			static bool is_set_N_bit_in_EAX(unsigned int bit);
+			static bool is_set_N_bit_in_EBX(unsigned int bit);
+			static bool is_set_N_bit_in_ECX(unsigned int bit);
+			static bool is_set_N_bit_in_EDX(unsigned int bit);
 	};
 }
 

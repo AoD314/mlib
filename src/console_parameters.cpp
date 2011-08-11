@@ -6,6 +6,16 @@
 
 namespace mlib
 {
+	ConsoleParameters::ConsoleParameters (const ConsoleParameters& params):
+	    argc(params.argc), argv(params.argv), path(params.path) {}
+
+	ConsoleParameters& ConsoleParameters::operator = (const ConsoleParameters& params)
+	{
+		argc = params.argc;
+		argv = params.argv;
+		path = params.path;
+		return *this;
+	}
 
 	#define SPECIALIZATION(TYPE)\
 	template<>\

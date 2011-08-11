@@ -5,7 +5,7 @@
 #include "mlib/progressbar.hpp"
 #include "mlib/convert.hpp"
 
-int main(int argc, const char ** argv)
+int main(int, const char **)
 {
 	int max_value = 7;
 	for (int i = 0; i <= max_value; i++)

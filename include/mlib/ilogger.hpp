@@ -10,6 +10,7 @@ namespace mlib
 	{
 		public:
 			virtual void log(std::string msg) = 0;
+			virtual ~ILogger() {}
 	};
 }
 

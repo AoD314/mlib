@@ -13,7 +13,7 @@ void foo(double * arr, int n)
 		arr[j] = sin(i1 * i2 * i3 * j);
 }
 
-int main(int argc, const char ** argv)
+int main(int, const char **)
 {
 	mlib::Timer timer;
 

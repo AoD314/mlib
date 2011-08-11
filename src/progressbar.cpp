@@ -24,7 +24,7 @@ namespace mlib
 		std::string progress_bar;
 		for (size_t i = 0; i < len; ++i)
 		{
-			if (i < static_cast<int>(len * progress))
+			if (i < static_cast<size_t>(static_cast<double>(len) * progress))
 			{
 				progress_bar += "=";
 			}

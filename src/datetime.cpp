@@ -1,6 +1,6 @@
 
-#include <mlib/datetime.hpp>
-#include <mlib/convert.hpp>
+#include "mlib/datetime.hpp"
+#include "mlib/convert.hpp"
 
 #include <ctime>
 #include <time.h>
@@ -55,6 +55,17 @@ namespace mlib
 	}
 
 	DateTime::DateTime (int yr, int mt, int dy, int hr, int mn, int sc) : year(yr), month(mt), day(dy), hour(hr), minute(mn), second(sc) {}
+
+	DateTime::DateTime (size_t sec) : year(0), month(0), day(0), hour(0), minute(0), second(0) 
+	{
+		day  = static_cast<int>   (sec / (24 * 60 * 60));
+		sec -= static_cast<size_t>(day * (24 * 60 * 60));
+		hour = static_cast<int>(sec  / (60 * 60));
+		sec -= static_cast<size_t>(hour * (60 * 60));
+		minute = static_cast<int>(sec / 60);
+		sec   -= static_cast<size_t>(minute * 60);
+		second = static_cast<int>(sec);
+	}
 
 	DateTime DateTime::now()
 	{

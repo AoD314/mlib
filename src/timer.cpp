@@ -1,5 +1,6 @@
 
 #include "mlib/timer.hpp"
+#include "mlib/convert.hpp"
 
 #include <limits>
 
@@ -191,17 +192,7 @@ namespace mlib
 		}
 		else if (t.mode_p == inAll)
 		{
-			double sec = t.get_total_time_in_seconds();
-			unsigned long long timed = static_cast<unsigned long long>(sec) / 86400;
-			sec -= static_cast<double>(timed * 86400);
-
-			unsigned long long timeh = static_cast<unsigned long long>(sec) / 3600;
-			sec -= static_cast<double>(timeh * 3600);
-
-			unsigned long long timem = static_cast<unsigned long long>(sec) / 60;
-			sec -= static_cast<double>(timem * 60);
-
-			out << timed << " days " << timeh << "h  " << timem << "m  " << std::fixed << std::setprecision(10) << sec << "s";
+			out << time_to_str(t.get_total_time_in_seconds());
 		}
 
 		return out;

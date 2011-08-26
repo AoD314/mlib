@@ -32,6 +32,9 @@ namespace mlib
 		if (!result && !throw_exception) return defval;
 		return t;
 	}
+
+	std::string size_to_str(const size_t size_in_byte);
+	std::string time_to_str(const double time_in_sec );
 }
 
 #endif

@@ -22,7 +22,7 @@ file(GLOB src_lib "src/*.cpp")
 file(GLOB inc_lib "include/mlib/*.hpp")
 
 add_library( ${target} SHARED ${src_lib} ${inc_lib})
-target_link_libraries( ${target} -lavcodec -lavformat )
+target_link_libraries( ${target} -lavcodec -lavformat -lswscale)
 
 # ----------------------------------------------------------------------------
 # CONFIGURE

@@ -16,6 +16,7 @@ namespace mlib
 			std::string time_str() const;
 
 			DateTime (int yr, int mt, int dy, int hr, int mn, int sc);
+			DateTime (size_t sec);
 
 			int Y() const;
 			int M() const;

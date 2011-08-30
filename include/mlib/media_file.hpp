@@ -49,11 +49,6 @@ namespace mlib
 			AVFrame         * avframe_rgb;
 
 			int video_stream;
-			uint8_t * buffer;
-
-
-
-
 	};
 
 }

@@ -12,11 +12,11 @@ set(WARNING "${WARNING} -Wunreachable-code -Woverloaded-virtual -Wctor-dtor-priv
 set(CMAKE_CXX_FLAGS "-msse4.1 -msse4.2 ${WARNING}")
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize") 
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize -floop-parallelize-all")
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 ")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
 
 file(GLOB src_lib "src/*.cpp")
 file(GLOB inc_lib "include/mlib/*.hpp")

@@ -21,13 +21,20 @@ namespace mlib
 		}
 	}
 
-	Image::Image(size_t width, size_t height, unsigned char * d, int linesize) : 
-	    data(0), w(width), h(height), s(static_cast<size_t>(linesize)), size_in_byte(s * h)
+	Image::Image(size_t width, size_t height, unsigned char * d, int linesize, bool copy_memory)
+	: data(0), w(width), h(height), s(static_cast<size_t>(linesize)), size_in_byte(s * h)
 	{
-		if (size_in_byte != 0)
+		if (copy_memory == true)
 		{
-			data = new unsigned char[size_in_byte];
-			mem_copy<unsigned char>(d, data, size_in_byte);
+			if (size_in_byte != 0)
+			{
+				data = new unsigned char[size_in_byte];
+				mem_copy<unsigned char>(d, data, size_in_byte);
+			}
+		}
+		else
+		{
+			data = d;
 		}
 	}
 
@@ -108,8 +115,11 @@ namespace mlib
 
 	Image::~Image()
 	{
-		delete[] data;
-		data = 0;
+		if (data != 0)
+		{
+			delete[] data;
+			data = 0;
+		}
 	}
 
 

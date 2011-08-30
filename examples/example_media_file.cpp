@@ -27,8 +27,11 @@ int main(int argc, const char ** argv)
 	std::string filename = params.get<std::string>("-f | --file", "test.avi");
 	mlib::MediaFile mf(filename);
 
-	//mf.print_info();
+	/*/
+	mf.print_info();
+	std::cout << std::endl;
 	//*/
+	
 	mlib::DateTime dt(static_cast<size_t>(mf.get_duration_sec()));
 
 	std::cout << "duration in sec : " << mlib::to_str(dt) << std::endl; 
@@ -40,7 +43,7 @@ int main(int argc, const char ** argv)
 	std::cout << "size            : " << mlib::size_to_str(static_cast<size_t>(mf.get_size())) << std::endl; 
 	//*/
 
-	size_t ind = 1;
+	size_t ind = 0;
 	while(true)
 	{
 		//std::cout << "read " << mlib::to_str(ind, 4, 0, '0') << " ... ";
@@ -56,17 +59,19 @@ int main(int argc, const char ** argv)
 
 		//std::cout << "ok" << std::endl;
 
-		//int num = get_number_of_frames(img);
-		//std::cout << "num : " << num << std::endl;
+		int num = get_number_of_frames(img);
+		std::cout << "num : " << num << std::endl;
 
-		//if (num == 10) 
-		//{
-			//mf.seek(static_cast<size_t>(20));
-			//mf.seek(30.0);
-		//}
+		//if (num == 100) 
+		{
+			//mf.seek(static_cast<size_t>(3590));
+			//mf.seek(60.0);
+			//mlib::Image img(mf.read());
+		}
 
-		//std::cout << ">>>   curr dts   >>>>>>  : " << mf.get_cur_dts() << std::endl; 
-		
+
+		//std::cout << "info: " << mf.get_cur_dts() << std::endl;
+
 		ind++;
 	}
 

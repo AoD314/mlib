@@ -11,7 +11,7 @@ namespace mlib
 	{
 		public:
 			Image(size_t width, size_t height);
-			Image(size_t width, size_t height, unsigned char * d, int linesize);
+			Image(size_t width, size_t height, unsigned char * d, int linesize, bool copy_memory = true);
 
 			Image(const Image& img);
 			Image& operator=(const Image& img);

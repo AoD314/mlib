@@ -27,3 +27,4 @@ namespace mlib
 #define LOG_DEBUG(msg) std::string("[DEBUG][") + std::string(__FILE__).erase(0, 1 + std::string(__FILE__).find_last_of("/\\")) + std::string(":") + std::string(mlib::to_str(__LINE__)) + std::string("]  ") + std::string(msg)
 
 #endif
+

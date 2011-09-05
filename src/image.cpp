@@ -7,8 +7,8 @@
 namespace mlib
 {
 
-	Image::Image(size_t width, size_t height) : 
-	    data(0), w(width), h(height), s(3 * w), size_in_byte(s * h)
+	Image::Image(size_t width, size_t height)
+	: data(0), w(width), h(height), s(3 * w), size_in_byte(s * h)
 	{
 		if (size_in_byte != 0)
 		{
@@ -38,8 +38,8 @@ namespace mlib
 		}
 	}
 
-	Image::Image(const Image& img) : 
-	    data(0), w(img.w), h(img.h), s(img.s), size_in_byte(img.size_in_byte)
+	Image::Image(const Image& img)
+	: data(0), w(img.w), h(img.h), s(img.s), size_in_byte(img.size_in_byte)
 	{
 		if (size_in_byte != 0)
 		{

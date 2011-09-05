@@ -8,6 +8,7 @@
 
 namespace mlib
 {
+	//! Convert Type to std::string
 	template <typename T>
 	std::string to_str(const T & t, int align = 0, int precision = 0, char c = ' ')
 	{
@@ -22,6 +23,7 @@ namespace mlib
 		return ss.str();
 	}
 
+	//! Parse Type from std::string
 	template <typename T>
 	T from_str(const std::string & val, bool throw_exception = true, T defval = T())
 	{
@@ -33,7 +35,11 @@ namespace mlib
 		return t;
 	}
 
+
+	//! Formating size to std::string
 	std::string size_to_str(const size_t size_in_byte);
+
+	//! Formating time to std::string
 	std::string time_to_str(const double time_in_sec );
 }
 

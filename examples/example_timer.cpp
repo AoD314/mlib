@@ -10,7 +10,7 @@ void foo(double * arr, size_t n)
 	for (size_t i2 = 0; i2 < n; i2++)
 	for (size_t i3 = 0; i3 < n; i3++)
 	for (size_t  j = 0;  j < n; j++)
-		arr[j] = sin(i1 * i2 * i3 * j);
+		arr[j] = sin(static_cast<double>(i1 * i2 * i3 * j));
 }
 
 int main(int, const char **)

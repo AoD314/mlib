@@ -6,8 +6,8 @@
 
 namespace mlib
 {
-	ConsoleParameters::ConsoleParameters (const ConsoleParameters& params):
-	    argc(params.argc), argv(params.argv), path(params.path) {}
+	ConsoleParameters::ConsoleParameters (const ConsoleParameters& params)
+	: argc(params.argc), argv(params.argv), path(params.path) {}
 
 	ConsoleParameters& ConsoleParameters::operator = (const ConsoleParameters& params)
 	{

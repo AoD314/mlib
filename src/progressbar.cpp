@@ -9,7 +9,7 @@ namespace mlib
 	void progress_bar(double progress, std::string msg, size_t len)
 	{
 		std::cout << "\x1B[2K"; // Erase the entire current line.
-		for (size_t i = 0; i < 1024; i++) std::cout << "\b"; // Move to the beginning of the current line.
+		for (size_t i = 0; i < 512; i++) std::cout << "\b"; // Move to the beginning of the current line.
 
 		if (msg != "")
 		{
@@ -35,7 +35,7 @@ namespace mlib
 		}
 
 		std::cout << "[" << progress_bar << "] " << std::setiosflags(std::ios::fixed)
-				  << std::setprecision(2) << std::setw(6) << progress * 100.0 << "%";
+		          << std::setprecision(2) << std::setw(6) << progress * 100.0 << "%";
 
 		if (static_cast<int>(progress) == 1) std::cout << "\n";
 

@@ -8,8 +8,8 @@
 
 namespace mlib
 {
-	MediaFile::MediaFile(const std::string& filename) : 
-	    avformat_context(0), avcodec_context(0), avcodec(0),
+	MediaFile::MediaFile(const std::string& filename)
+	:   avformat_context(0), avcodec_context(0), avcodec(0),
 	    avframe_native(0), avframe_rgb(0), video_stream(-1) 
 	{
 		av_register_all();
@@ -54,8 +54,8 @@ namespace mlib
 
 	}
 
-	MediaFile::MediaFile(const MediaFile& mf) : 
-	    avformat_context(mf.avformat_context), 
+	MediaFile::MediaFile(const MediaFile& mf)
+	:   avformat_context(mf.avformat_context), 
 	    avcodec_context (mf.avcodec_context), 
 	    avcodec(0),
 	    avframe_native(0), 
@@ -75,7 +75,7 @@ namespace mlib
 		AVPacket packet;
 
 		int count_errs = 0;
-		const int max_number_of_attempts = 8;
+		const int max_number_of_attempts = 16;
 
 		while(true)
 		{

@@ -5,6 +5,7 @@
 #include "mlib/console_parameters.hpp"
 #include "mlib/media_file.hpp"
 #include "mlib/datetime.hpp"
+#include "mlib/timer.hpp"
 #include "mlib/convert.hpp"
 
 int get_number_of_frames(mlib::Image & img)
@@ -27,11 +28,8 @@ int main(int argc, const char ** argv)
 	std::string filename = params.get<std::string>("-f | --file", "test.avi");
 	mlib::MediaFile mf(filename);
 
+	//mf.print_info();
 	/*/
-	mf.print_info();
-	std::cout << std::endl;
-	//*/
-	
 	mlib::DateTime dt(static_cast<size_t>(mf.get_duration_sec()));
 
 	std::cout << "duration in sec : " << mlib::to_str(dt) << std::endl; 
@@ -39,18 +37,27 @@ int main(int argc, const char ** argv)
 	std::cout << "count frames    : " << mf.get_total_frames() << std::endl; 
 	std::cout << "fps             : " << mf.get_fps() << std::endl; 
 	std::cout << "bitrate         : " << mf.get_bitrate() << std::endl; 
-	std::cout << "size            : " << mf.get_size() << std::endl; 
-	std::cout << "size            : " << mlib::size_to_str(static_cast<size_t>(mf.get_size())) << std::endl; 
+	std::cout << "frame size      : " << mf.get_width() << " x " << mf.get_height() << std::endl; 
+	std::cout << "file size       : " << mf.get_size() << std::endl; 
+	std::cout << "file size       : " << mlib::size_to_str(static_cast<size_t>(mf.get_size())) << std::endl; 
 	//*/
+
+	mlib::Timer t;
+
+	t.start();
 
 	size_t ind = 0;
 	while(true)
 	{
 		//std::cout << "read " << mlib::to_str(ind, 4, 0, '0') << " ... ";
 		mlib::Image img(mf.read());
-		if (img.empty()) break;
 
-		
+		if (img.empty()) 
+		{
+			//std::cout << "empty\n";
+			break;
+		}
+
 		/*/
 		std::string name("output_img_" + mlib::to_str(ind, 4, 0, '0'));
 		img.save(name);
@@ -59,23 +66,21 @@ int main(int argc, const char ** argv)
 
 		//std::cout << "ok" << std::endl;
 
-		int num = get_number_of_frames(img);
-		std::cout << "num : " << num << std::endl;
+		//int num = get_number_of_frames(img);
+		//std::cout << "num : " << num << std::endl;
 
-		//if (num == 100) 
-		{
-			//mf.seek(static_cast<size_t>(3590));
-			//mf.seek(60.0);
-			//mlib::Image img(mf.read());
-		}
-
-
-		//std::cout << "info: " << mf.get_cur_dts() << std::endl;
+		//if (num == 10) 
+		//{
+			//mf.seek(static_cast<size_t>(20));
+			//mf.seek(30.0);
+		//}
 
 		ind++;
 	}
 
-	std::cout << "read " << ind << " frames";
+	t.stop();
+
+	std::cout << "read " << ind << " frames in " << t << "   FPS: " << static_cast<double>(ind) / t.get_total_time_in_seconds();
 	std::cout << std::endl;
 	return 0;
 }

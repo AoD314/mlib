@@ -22,7 +22,15 @@ namespace mlib
 			ConsoleParameters(int argc, const char ** argv)
 			: argc(argc), argv(argv), path(argv[0])
 			{
-				path = path.substr(0, path.find_last_of("/\\"));
+				size_t found = path.find_last_of("/\\");
+				if ( std::string::npos != found )
+				{
+					path = path.substr(0, found) + "/";
+				}
+				else
+				{
+					path = "";
+				}
 			}
 
 			ConsoleParameters (const ConsoleParameters& params); 

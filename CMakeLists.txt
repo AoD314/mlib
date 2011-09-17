@@ -25,6 +25,43 @@ file(GLOB inc_lib "include/mlib/*.hpp")
 add_library( ${target} ${src_lib} ${inc_lib})
 
 # ----------------------------------------------------------------------------
+# CHECK_MODULE
+# ----------------------------------------------------------------------------
+
+macro(CHECK_MODULE module_name define)
+    set(${define} 0)
+    if(PKG_CONFIG_FOUND)
+        set(ALIAS               ALIASOF_${module_name})
+        set(ALIAS_FOUND                 ${ALIAS}_FOUND)
+        set(ALIAS_INCLUDE_DIRS   ${ALIAS}_INCLUDE_DIRS)
+        set(ALIAS_LIBRARY_DIRS   ${ALIAS}_LIBRARY_DIRS)
+        set(ALIAS_LIBRARIES         ${ALIAS}_LIBRARIES)
+
+        PKG_CHECK_MODULES(${ALIAS} ${module_name})
+
+        if (${ALIAS_FOUND})
+            set(${define} 1)
+            foreach(P "${ALIAS_INCLUDE_DIRS}")
+                if (${P})
+                    list(APPEND HIGHGUI_INCLUDE_DIRS ${${P}})
+                endif()
+            endforeach()
+
+            foreach(P "${ALIAS_LIBRARY_DIRS}")
+                if (${P})
+                    list(APPEND HIGHGUI_LIBRARY_DIRS ${${P}})
+                endif()
+            endforeach()
+
+            list(APPEND HIGHGUI_LIBRARIES ${${ALIAS_LIBRARIES}})
+        endif()
+    endif()
+endmacro()
+
+# ----------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------
 # CONFIGURE
 # ----------------------------------------------------------------------------
 
@@ -65,9 +102,10 @@ if(WITH_FFMPEG)
 		CHECK_MODULE(libswscale HAVE_FFMPEG_SWSCALE)
 		CHECK_INCLUDE_FILE(libavformat/avformat.h HAVE_GENTOO_FFMPEG)
 		CHECK_INCLUDE_FILE(ffmpeg/avformat.h HAVE_FFMPEG_FFMPEG)
+
 		if(NOT HAVE_GENTOO_FFMPEG AND NOT HAVE_FFMPEG_FFMPEG)
 			if(EXISTS /usr/include/ffmpeg/libavformat/avformat.h OR HAVE_FFMPEG_SWSCALE)
-				set(HAVE_GENTOO_FFMPEG 1)
+				set(HAVE_GENTOO_FFMPEG 1)				
 			endif()
 		endif()
 		
@@ -75,6 +113,10 @@ if(WITH_FFMPEG)
 			if(HAVE_FFMPEG_SWSCALE OR NOT HAVE_GENTOO_FFMPEG)
 				set(HAVE_FFMPEG 1)
 			endif()
+		endif()
+		
+		if (HAVE_FFMPEG || HAVE_GENTOO_FFMPEG)
+			target_link_libraries( ${target} -lavcodec -lavformat -lswscale)
 		endif()
 		
 	endif()

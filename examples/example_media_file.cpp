@@ -4,6 +4,7 @@
 
 #include "mlib/console_parameters.hpp"
 #include "mlib/media_file.hpp"
+#include "mlib/image.hpp"
 #include "mlib/datetime.hpp"
 #include "mlib/timer.hpp"
 #include "mlib/convert.hpp"
@@ -23,6 +24,8 @@ int get_number_of_frames(mlib::Image & img)
 
 int main(int argc, const char ** argv)
 {
+	#ifdef HAVE_FFMPEG
+
 	mlib::ConsoleParameters params(argc, argv);
 
 	std::string filename = params.get<std::string>("-f | --file", "test.avi");
@@ -82,6 +85,10 @@ int main(int argc, const char ** argv)
 
 	std::cout << "read " << ind << " frames in " << t << "   FPS: " << static_cast<double>(ind) / t.get_total_time_in_seconds();
 	std::cout << std::endl;
+	#else
+		std::cout << "Unsupported !!!" << std::endl;
+	#endif
+
 	return 0;
 }
 

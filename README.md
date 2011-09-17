@@ -5,15 +5,18 @@ Classes
 * Timer
 * ConsoleParameter
 * Convert
-* Progress Bar
+* ProgressBar
 * Logger
 * DateTime
 * Exception
+* Logger
+* Image
+* MediaFile (only Linux)
 
 System Requirements
 -------------------
 
- OS: Linux x64
+ OS: Linux / Windows 
 
 CPU: Intel Core i7 (for Timer)
 

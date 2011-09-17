@@ -4,7 +4,19 @@
 
 #include <omp.h>
 #include <limits>
-#include <unistd.h>
+
+#if defined WIN32 || defined _WIN32
+    #include <windows.h>
+	#include <intrin.h>
+#elif defined __linux__ || defined __APPLE__
+    #include <unistd.h>
+    #include <stdio.h>
+    #include <sys/types.h> 
+    #include <sys/sysctl.h>
+#endif
+
+#undef max
+#undef min
 
 namespace mlib
 {

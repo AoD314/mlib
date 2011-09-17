@@ -54,24 +54,38 @@ namespace mlib
 
 			inline void start()
 			{
-				asm volatile (  "cpuid\n\t"
-				                "rdtsc\n\t"
-				                "mov %%edx, %0\n\t"
-				                "mov %%eax, %1\n\t" : "=r"(time_edx), "=r"(time_eax) ::
-				                "%rax", "%rbx", "%rcx", "%rdx");
+				#if defined WIN32 || defined _WIN32 || defined WINCE
+					LARGE_INTEGER counter;
+					QueryPerformanceCounter( &counter );
+					time_edx = counter.HighPart;
+					time_eax = counter.HighPart;
+				#elif defined __linux || defined __linux__
+					asm volatile (  "cpuid\n\t"
+									"rdtsc\n\t"
+									"mov %%edx, %0\n\t"
+									"mov %%eax, %1\n\t" : "=r"(time_edx), "=r"(time_eax) ::
+									"%rax", "%rbx", "%rcx", "%rdx");
+				#endif
 			}
 
 			inline void stop ()
 			{
-				asm volatile (  "rdtscp\n\t"
-				                "mov %%edx, %0\n\t"
-				                "mov %%eax, %1\n\t"
-				                "cpuid\n\t" : "=r"(time_edx1), "=r"(time_eax1) ::
-				                "%rax", "%rbx", "%rcx", "%rdx");
+				#if defined WIN32 || defined _WIN32 || defined WINCE
+					LARGE_INTEGER counter;
+					QueryPerformanceCounter( &counter );
+					time_edx1 = counter.HighPart;
+					time_eax1 = counter.HighPart;
+				#elif defined __linux || defined __linux__
+					asm volatile (  "rdtscp\n\t"
+									"mov %%edx, %0\n\t"
+									"mov %%eax, %1\n\t"
+									"cpuid\n\t" : "=r"(time_edx1), "=r"(time_eax1) ::
+									"%rax", "%rbx", "%rcx", "%rdx");
+				#endif
 
 				time_last =
-				            (static_cast<unsigned long long>(time_edx1) << 32 | static_cast<unsigned long long>(time_eax1)) -
-				            (static_cast<unsigned long long>(time_edx)  << 32 | static_cast<unsigned long long>(time_eax));
+							(static_cast<unsigned long long>(time_edx1) << 32 | static_cast<unsigned long long>(time_eax1)) -
+							(static_cast<unsigned long long>(time_edx)  << 32 | static_cast<unsigned long long>(time_eax));
 				CalcSec();
 			}
 

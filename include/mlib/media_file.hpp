@@ -4,54 +4,58 @@
 
 #include <string>
 
-extern "C"
-{
-	#undef  UINT64_C
-	#define UINT64_C(val) val ## LL
-	#include <libavcodec/avcodec.h>
-	#include <libavformat/avformat.h>
-	#include <libswscale/swscale.h>
-}
+#ifdef HAVE_FFMPEG
 
-#include "mlib/image.hpp"
-
-namespace mlib
-{
-	class MediaFile
+	extern "C"
 	{
-		public:
-			MediaFile(const std::string& filename);
-			MediaFile(const MediaFile& mf);
-			MediaFile& operator=(const MediaFile& mf);
+		#undef  UINT64_C
+		#define UINT64_C(val) val ## LL
+		#include <libavcodec/avcodec.h>
+		#include <libavformat/avformat.h>
+		#include <libswscale/swscale.h>
+	}
 
-			~MediaFile();
+	#include "mlib/image.hpp"
 
-			Image   read();
+	namespace mlib
+	{
+		class MediaFile
+		{
+			public:
+				MediaFile(const std::string& filename);
+				MediaFile(const MediaFile& mf);
+				MediaFile& operator=(const MediaFile& mf);
 
-			void    seek(size_t frame_number);
-			void    seek(double sec);
+				~MediaFile();
 
-			double  get_duration_sec();
-			double  get_fps();
-			int64_t get_total_frames();
-			int64_t get_size();
-			int64_t get_bitrate();
+				Image   read();
+
+				void    seek(size_t frame_number);
+				void    seek(double sec);
+
+				double  get_duration_sec();
+				double  get_fps();
+				int64_t get_total_frames();
+				int64_t get_size();
+				int64_t get_bitrate();
 			
-			int64_t get_cur_dts();
+				int64_t get_cur_dts();
 
-			void print_info();
+				void print_info();
 
-		private:
-			AVFormatContext * avformat_context;
-			AVCodecContext  * avcodec_context;
-			AVCodec         * avcodec;
-			AVFrame         * avframe_native;
-			AVFrame         * avframe_rgb;
+			private:
+				AVFormatContext * avformat_context;
+				AVCodecContext  * avcodec_context;
+				AVCodec         * avcodec;
+				AVFrame         * avframe_native;
+				AVFrame         * avframe_rgb;
 
-			int video_stream;
-	};
+				int video_stream;
+		};
 
-}
+	}
+
+#endif
 
 #endif
 

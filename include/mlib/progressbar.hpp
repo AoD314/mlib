@@ -4,6 +4,10 @@
 
 #include <string>
 
+#if defined WIN32 || defined _WIN32
+    #include <windows.h>
+#endif
+
 namespace mlib
 {
 	//! Method for drawing progress bar in console
@@ -16,6 +20,8 @@ namespace mlib
 	*/
 	void progress_bar(double progress, std::string msg = "", size_t len = 80);
 
+	//! Wait sec seconds
+	void sleep(unsigned int sec);
 }
 
 #endif

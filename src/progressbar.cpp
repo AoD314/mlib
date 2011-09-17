@@ -8,8 +8,8 @@ namespace mlib
 {
 	void progress_bar(double progress, std::string msg, size_t len)
 	{
-		std::cout << "\x1B[2K"; // Erase the entire current line.
-		for (size_t i = 0; i < 512; i++) std::cout << "\b"; // Move to the beginning of the current line.
+		std::cout << "\x1B[2K"; // Erase the entire current line.		
+		for (size_t i = 0; i < 256; i++) std::cout << "\b"; // Move to the beginning of the current line.
 
 		if (msg != "")
 		{
@@ -40,6 +40,15 @@ namespace mlib
 		if (static_cast<int>(progress) == 1) std::cout << "\n";
 
 		std::flush(std::cout);
+	}
+
+	void sleep(unsigned int sec)
+	{
+		#if defined WIN32 || defined _WIN32 || defined WINCE
+			Sleep(sec * 1000);
+		#elif defined __linux || defined __linux__
+			sleep(sec);
+		#endif
 	}
 
 }

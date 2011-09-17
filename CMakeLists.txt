@@ -7,22 +7,22 @@ project( ${target} )
 
 include_directories("include")
 
-set(WARNING "-Wall -Werror -Wextra -Weffc++ -Wconversion -Wsign-conversion -Wold-style-cast ")
-set(WARNING "${WARNING} -Wunreachable-code -Woverloaded-virtual -Wctor-dtor-privacy ")
-set(CMAKE_CXX_FLAGS "-msse4.1 -msse4.2 ${WARNING}")
-
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize -floop-parallelize-all")
-
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
+if(UNIX)
+	set(WARNING "-Wall -Werror -Wextra -Weffc++ -Wconversion -Wsign-conversion -Wold-style-cast ")
+	set(WARNING "${WARNING} -Wunreachable-code -Woverloaded-virtual -Wctor-dtor-privacy ")
+	set(CMAKE_CXX_FLAGS "-msse4.1 -msse4.2 ${WARNING}")
+	
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wnon-virtual-dtor -foptimize-sibling-calls")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -finline-functions -ftree-loop-optimize -floop-parallelize-all")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe -fomit-frame-pointer ")
+	
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb")
+endif()
 
 file(GLOB src_lib "src/*.cpp")
 file(GLOB inc_lib "include/mlib/*.hpp")
 
-add_library( ${target} SHARED ${src_lib} ${inc_lib})
-target_link_libraries( ${target} -lavcodec -lavformat -lswscale)
+add_library( ${target} ${src_lib} ${inc_lib})
 
 # ----------------------------------------------------------------------------
 # CONFIGURE
@@ -50,6 +50,41 @@ set(mlib_version "${MLIB_MAJOR_VERSION}.${MLIB_MINOR_VERSION}.${MLIB_SUBMINOR_VE
 # ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
+# FFMPEG
+# ----------------------------------------------------------------------------
+
+set(WITH_FFMPEG OFF CACHE BOOL "Build with FFMPEG")
+
+if(WITH_FFMPEG)
+
+	set(HAVE_FFMPEG 0)
+	if(WITH_FFMPEG)
+		CHECK_MODULE(libavcodec HAVE_FFMPEG_CODEC)
+		CHECK_MODULE(libavformat HAVE_FFMPEG_FORMAT)
+		CHECK_MODULE(libavutil HAVE_FFMPEG_UTIL)
+		CHECK_MODULE(libswscale HAVE_FFMPEG_SWSCALE)
+		CHECK_INCLUDE_FILE(libavformat/avformat.h HAVE_GENTOO_FFMPEG)
+		CHECK_INCLUDE_FILE(ffmpeg/avformat.h HAVE_FFMPEG_FFMPEG)
+		if(NOT HAVE_GENTOO_FFMPEG AND NOT HAVE_FFMPEG_FFMPEG)
+			if(EXISTS /usr/include/ffmpeg/libavformat/avformat.h OR HAVE_FFMPEG_SWSCALE)
+				set(HAVE_GENTOO_FFMPEG 1)
+			endif()
+		endif()
+		
+		if(HAVE_FFMPEG_CODEC AND HAVE_FFMPEG_FORMAT AND HAVE_FFMPEG_UTIL)
+			if(HAVE_FFMPEG_SWSCALE OR NOT HAVE_GENTOO_FFMPEG)
+				set(HAVE_FFMPEG 1)
+			endif()
+		endif()
+		
+	endif()
+	
+endif()
+
+# ----------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------
 # EXAMPLES
 # ----------------------------------------------------------------------------
 
@@ -71,10 +106,11 @@ endif()
 # ----------------------------------------------------------------------------
 # INSTALL
 # ----------------------------------------------------------------------------
-
-install(TARGETS ${target} DESTINATION "/usr/lib")
-find_path(LIB_INCLUDE_PATH string.h)
-install(FILES ${inc_lib} DESTINATION "${LIB_INCLUDE_PATH}/mlib")
+if(UNIX)
+	install(TARGETS ${target} DESTINATION "/usr/lib")
+	find_path(LIB_INCLUDE_PATH string.h)
+	install(FILES ${inc_lib} DESTINATION "${LIB_INCLUDE_PATH}/mlib")
+endif()
 
 # ----------------------------------------------------------------------------
 
@@ -84,6 +120,16 @@ install(FILES ${inc_lib} DESTINATION "${LIB_INCLUDE_PATH}/mlib")
 message("")
 message("General configuration for mlib ${mlib_version} =====================================")
 message("")
+message("    Build with FFMPEG  : " ${WITH_FFMPEG})
+if (${WITH_FFMPEG})
+	message("    FFMPEG:")
+	message("      codec:"        ${HAVE_FFMPEG_CODEC}")
+	message("      format:        ${HAVE_FFMPEG_FORMAT}")
+	message("      util:"         ${HAVE_FFMPEG_UTIL}")
+	message("      swscale:"      ${HAVE_FFMPEG_SWSCALE}")
+	message("      gentoo-style:" ${HAVE_GENTOO_FFMPEG}")
+	message("")
+endif()
 message("    Build all examples : " ${BUILD_EXAMPLES})
 message("    Configuration type : " ${CMAKE_BUILD_TYPE})
 message("")

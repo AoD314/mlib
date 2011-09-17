@@ -7,7 +7,6 @@
 
 namespace mlib
 {
-
 	std::ostream & operator <<( std::ostream & stream, const DateTime & dt)
 	{
 		stream << std::string (dt.date_str() + " " + dt.time_str());
@@ -58,13 +57,13 @@ namespace mlib
 
 	DateTime::DateTime (size_t sec) : year(0), month(0), day(0), hour(0), minute(0), second(0) 
 	{
-		day  = static_cast<int>   (sec / (24 * 60 * 60));
-		sec -= static_cast<size_t>(day * (24 * 60 * 60));
-		hour = static_cast<int>(sec  / (60 * 60));
-		sec -= static_cast<size_t>(hour * (60 * 60));
-		minute = static_cast<int>(sec / 60);
+		day  = static_cast<int>     (sec / (24 * 60 * 60));
+		sec -= static_cast<size_t>  (day * (24 * 60 * 60));
+		hour = static_cast<int>     (sec / (60 * 60));
+		sec -= static_cast<size_t>  (hour * (60 * 60));
+		minute = static_cast<int>   (sec / 60);
 		sec   -= static_cast<size_t>(minute * 60);
-		second = static_cast<int>(sec);
+		second = static_cast<int>   (sec);
 	}
 
 	DateTime DateTime::now()

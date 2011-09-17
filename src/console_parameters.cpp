@@ -27,7 +27,7 @@ namespace mlib
 	\
 		while (i < argc)\
 		{\
-					for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it)\
+			for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it)\
 			{\
 				if ((*it).compare(argv[i]) == 0)\
 				{\
@@ -40,11 +40,15 @@ namespace mlib
 	}
 
 	SPECIALIZATION(char)
+	SPECIALIZATION(unsigned char)
 	SPECIALIZATION(short)
+	SPECIALIZATION(unsigned short)
+	SPECIALIZATION(unsigned int)
 	SPECIALIZATION(int)
-	SPECIALIZATION(long)
+	SPECIALIZATION(unsigned long)
 	SPECIALIZATION(float)
 	SPECIALIZATION(double)
+	SPECIALIZATION(long double)
 	SPECIALIZATION(std::size_t)
 	SPECIALIZATION(std::string)
 
@@ -57,7 +61,7 @@ namespace mlib
 
 			std::vector<std::string> params = get_aliases_from_string(param);
 
-					for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it)
+			for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it)
 				compare = compare || ((*it).compare(argv[i]) == 0);
 
 			if (compare)

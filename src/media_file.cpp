@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#ifdef HAVE_FFMPEG
+
 namespace mlib
 {
 	MediaFile::MediaFile(const std::string& filename)
@@ -236,4 +238,6 @@ namespace mlib
 	}
 
 }
+
+#endif
 

@@ -2,28 +2,27 @@
 #include <iostream>
 #include <string>
 
-#include "mlib/console_parameters.hpp"
+#include "mlib/command_line_parser.hpp"
 
 using std::cout;
 using std::endl;
 
-void print_help()
-{
-	cout << "help info:" << endl;
-	cout << "\t-x | --xxx <int>" << endl;
-}
+const std::string keys(
+	"{help h usage|| print help information}"
+	"{test t|20| test value = 20}"
+);
 
-int main(int argc, const char ** argv)
+int main(int argc, char ** argv)
 {
-	mlib::ConsoleParameters params(argc, argv);
+	mlib::CommandLineParser parser(argc, argv, keys);
 
-	if (params.has(" -h | --help | --usage"))
+	if (parser.has("help"))
 	{
-		print_help();
+		parser.print_help();
 		return 0;
 	}
 
-	int x = params.get("-x | --xxx", 10);
+	int x = parser.get<int>("test");
 	cout << "x = " << x << endl;
 
 	return 0;

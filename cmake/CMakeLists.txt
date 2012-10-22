@@ -1,20 +1,9 @@
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 2.8.9)
 
-set(target "vpxenc")
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectUtils.cmake)
 
-project(${target})
+create_project("test_project")
 
-# Add directory to CMake's module path
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-include(cmake/Compiler.cmake REQUIRED)
+set_dependency(opencv)
 
-find_package(OpenCV REQUIRED)
-
-file(GLOB srcs "src/*.cpp")
-file(GLOB hdrs "src/*.hpp")
-
-add_executable( ${target} ${srcs} ${hdrs} )
-
-target_link_libraries( ${target} ${OpenCV_LIBS} )
-
-
+add_application("src")

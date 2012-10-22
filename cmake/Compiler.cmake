@@ -1,14 +1,14 @@
 
 set(ENABLE_ALLWARNING     TRUE   CACHE BOOL "Compile with all warning"     )
-set(ENABLE_DEBUG_INFO     TRUE   CACHE BOOL "Add debug info"               )
+set(ENABLE_DEBUG_INFO     FALSE  CACHE BOOL "Add debug info"               )
 set(ENABLE_PROFILING      FALSE  CACHE BOOL "Compile with profiling flags" )
 
-set(ENABLE_SSE2   FALSE   CACHE BOOL "ENABLE SSE2"   )
-set(ENABLE_SSE3   FALSE   CACHE BOOL "ENABLE SSE3"   )
-set(ENABLE_SSE4   FALSE   CACHE BOOL "ENABLE SSE4"   )
-set(ENABLE_AVX    FALSE   CACHE BOOL "ENABLE AVX"    )
-set(ENABLE_OPENMP FALSE   CACHE BOOL "ENABLE OpenMP" )
-set(ENABLE_C++11  TRUE    CACHE BOOL "Support C++11" )
+set(ENABLE_SSE2   TRUE   CACHE BOOL "ENABLE SSE2"   )
+set(ENABLE_SSE3   TRUE   CACHE BOOL "ENABLE SSE3"   )
+set(ENABLE_SSE4   FALSE  CACHE BOOL "ENABLE SSE4"   )
+set(ENABLE_AVX    FALSE  CACHE BOOL "ENABLE AVX"    )
+set(ENABLE_OPENMP FALSE  CACHE BOOL "ENABLE OpenMP" )
+set(ENABLE_C++11  TRUE   CACHE BOOL "Support C++11" )
 
 if(NOT MSVC)
     if(${ENABLE_DEBUG_INFO})
@@ -62,6 +62,7 @@ if(NOT MSVC)
     endif()
 
 
+
 else()
 
     include(ProcessorCount)
@@ -74,6 +75,11 @@ else()
     if(${ENABLE_SSE2})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /arch:SSE2 ")
         set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}    /arch:SSE2 ")
+    endif()
+
+    if(${ENABLE_SSE4})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /arch:SSE4.1 ")
+        set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}    /arch:SSE4.1 ")
     endif()
 
     if(${ENABLE_OPENMP})

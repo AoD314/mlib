@@ -3,7 +3,7 @@ Classes
 -------
 
 * Timer
-* ConsoleParameter
+* CommandLineParser
 * Convert
 * ProgressBar
 * Logger
@@ -16,7 +16,7 @@ Classes
 System Requirements
 -------------------
 
- OS: Linux / Windows 
+OS: Linux / Windows 
 
 CPU: Intel Core i7 (for Timer)
 

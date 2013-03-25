@@ -276,7 +276,6 @@ if (TBB_INCLUDE_DIR)
         # Jiri: Self-built TBB stores the debug libraries in a separate directory.
         set (TBB_DEBUG_LIBRARY_DIRS ${TBB_LIBRARY_DEBUG_DIR} CACHE PATH "TBB debug library directory" FORCE)
         mark_as_advanced(TBB_INCLUDE_DIRS TBB_LIBRARY_DIRS TBB_DEBUG_LIBRARY_DIRS TBB_LIBRARIES TBB_DEBUG_LIBRARIES)
-        message(STATUS "Found Intel TBB")
     endif (TBB_LIBRARY)
 endif (TBB_INCLUDE_DIR)
 
@@ -290,11 +289,20 @@ if (NOT TBB_FOUND)
 endif (NOT TBB_FOUND)
 endif (NOT _TBB_INSTALL_DIR)
 
-
 if (TBB_FOUND)
 	set(TBB_INTERFACE_VERSION 0)
 	FILE(READ "${TBB_INCLUDE_DIRS}/tbb/tbb_stddef.h" _TBB_VERSION_CONTENTS)
 	STRING(REGEX REPLACE ".*#define TBB_INTERFACE_VERSION ([0-9]+).*" "\\1" TBB_INTERFACE_VERSION "${_TBB_VERSION_CONTENTS}")
 	set(TBB_INTERFACE_VERSION "${TBB_INTERFACE_VERSION}")
+
+
+    set(TBB_VERSION)
+    FILE(READ "${TBB_INCLUDE_DIRS}/tbb/tbb_stddef.h" _TBB_VERSION_)
+    STRING(REGEX REPLACE ".*#define TBB_VERSION_MAJOR ([0-9]+).*" "\\1" TBB_VERSION_MAJOR "${_TBB_VERSION_}")
+    STRING(REGEX REPLACE ".*#define TBB_VERSION_MINOR ([0-9]+).*" "\\1" TBB_VERSION_MINOR "${_TBB_VERSION_}")
+
+    set(TBB_VERSION "${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR}")  
+
+    message(STATUS "Found Intel TBB: ${TBB_VERSION}")
 endif (TBB_FOUND)
 

@@ -4,6 +4,8 @@
 
 #include <string>
 
+/// \todo TODO: add class MediaFile with build without FFmpeg
+
 #ifdef HAVE_FFMPEG
 
 	extern "C"

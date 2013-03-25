@@ -5,6 +5,9 @@
 #include <stddef.h> // for define size_t
 #include <string>
 
+/// \todo TODO: Implemented several class Image: ImageRGB, ImageYUV420, and convert it
+/// \todo TODO: integrate with OpenCV
+
 namespace mlib
 {
 	class Image

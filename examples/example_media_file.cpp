@@ -2,7 +2,6 @@
 #include <string>
 #include <iostream>
 
-#include "mlib/console_parameters.hpp"
 #include "mlib/media_file.hpp"
 #include "mlib/image.hpp"
 #include "mlib/datetime.hpp"

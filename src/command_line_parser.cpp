@@ -75,11 +75,13 @@ namespace mlib
 
 			if (s.find('=') != std::string::npos && s.find('=') < s.length())
 			{
-				std::vector<std::string> k_v = split_string(s, '=');
+                std::vector<std::string> k_v = split_string(s, '=', true);
 				for (int h = 0; h < 2; h++)
 				{
 					if (k_v[0][0] == '-')
+                    {
 						k_v[0] = k_v[0].substr(1, k_v[0].length() -1);
+                    }
 				}
 				apply_params(k_v[0], k_v[1]);
 			}
@@ -88,7 +90,9 @@ namespace mlib
 				for (int h = 0; h < 2; h++)
 				{
 					if (s[0] == '-')
+                    {
 						s = s.substr(1, s.length() - 1);
+                    }
 				}
 				apply_params(s, "true");
 			}
@@ -170,7 +174,8 @@ namespace mlib
 		{
 			for (size_t j = 0; j < data[i].keys.size(); j++)
 			{
-				if (name.compare(data[i].keys[j]) == 0 && std::string("true").compare(data[i].def_value) == 0)
+                if (name.compare(data[i].keys[j]) == 0 &&
+                        std::string("true").compare(data[i].def_value) == 0)
 				{
 					return true;
 				}
@@ -187,7 +192,9 @@ namespace mlib
 	void CommandLineParser::print_help()
 	{
 		if (about_message != "")
+        {
 			std::cout << about_message << std::endl;
+        }
 
 		std::cout << "Usage: " << app_name << " [params] ";
 
@@ -195,7 +202,7 @@ namespace mlib
 		{
 			if (data[i].number > -1)
 			{
-				std::string name = data[i].keys[0].substr(1, data[i].keys[0].length() - 1);
+                std::string name = data[i].keys[0].substr(1, data[i].keys[0].length()-1);
 				std::cout << name << " ";
 			}
 		}
@@ -206,7 +213,7 @@ namespace mlib
 		{
 			if (data[i].number == -1)
 			{
-				std::cout << "\t";
+                std::cout << "\t";
 				for (size_t j = 0; j < data[i].keys.size(); j++)
 				{
 					std::string k = data[i].keys[j];
@@ -225,8 +232,13 @@ namespace mlib
 						std::cout << ", ";
 					}
 				}
-				std::cout << " (by default:" << cat_string(data[i].def_value) << ")" << std::endl;
-				std::cout << "\t\t" << data[i].help_message << std::endl;
+                std::string dv = cat_string(data[i].def_value);
+                if (dv.compare("") != 0)
+                {
+                    std::cout << " (value:" << dv << ")";;
+                }
+
+                std::cout << "\n\t\t" << data[i].help_message << std::endl;
 			}
 		}
 		std::cout << std::endl;
@@ -241,8 +253,13 @@ namespace mlib
 
 				std::cout << k;
 
-				std::cout << " (by default:" << cat_string(data[i].def_value) << ")" << std::endl;
-				std::cout << "\t\t" << data[i].help_message << std::endl;
+                std::string dv = cat_string(data[i].def_value);
+                if (dv.compare("") != 0)
+                {
+                    std::cout << " (value:" << dv << ")";;
+                }
+
+                std::cout << "\n\t\t" << data[i].help_message << std::endl;
 			}
 		}
 	}

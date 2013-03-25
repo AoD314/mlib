@@ -8,8 +8,8 @@ using std::cout;
 using std::endl;
 
 const std::string keys(
-	"{help h usage|| print help information}"
-	"{test t|20| test value = 20}"
+    "{help h usage |  | print help information}"
+    "{test t       |20| test value = 20       }"
 );
 
 int main(int argc, char ** argv)

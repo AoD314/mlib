@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <unistd.h>
 
 namespace mlib
 {
@@ -42,12 +43,12 @@ namespace mlib
 		std::flush(std::cout);
 	}
 
-	void sleep(unsigned int sec)
+    void sleep(unsigned int msec)
 	{
 		#if defined WIN32 || defined _WIN32 || defined WINCE
-			Sleep(sec * 1000);
+            Sleep(msec);
 		#elif defined __linux || defined __linux__
-			sleep(sec);
+            usleep(msec * 1000);
 		#endif
 	}
 

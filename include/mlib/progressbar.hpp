@@ -20,8 +20,8 @@ namespace mlib
 	*/
 	void progress_bar(double progress, std::string msg = "", size_t len = 80);
 
-	//! Wait sec seconds
-	void sleep(unsigned int sec);
+    //! Wait msec mseconds
+    void sleep(unsigned int msec);
 }
 
 #endif

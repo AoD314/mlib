@@ -1,35 +1,30 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.6)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+include(cmake/general.cmake)
 
-set(target "mlib" )
+set_option(WITH_OPENCV          "Build library with OpenCV"               OFF )
+set_option(WITH_FFMPEG          "Build library with FFmpeg"               OFF )
 
-project( ${target} )
-
-# Add directory to CMake's module path
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-include(cmake/Compiler.cmake REQUIRED)
-
-include_directories("include")
-
-find_package(OpenCV REQUIRED)
-
-file(GLOB srcs "src/*.cpp")
-file(GLOB hdrs "include/mlib/*.hpp")
-
-add_library( ${target} ${srcs} ${hdrs} )
-
-target_link_libraries( ${target} ${OpenCV_LIBS} )
+set_option(BUILD_EXAMPLES       "Build Examples"                          ON  )
 
 
-set(BUILD_EXAMPLES ON CACHE BOOL "Build all examples")
+clear_dependency()
+if(WITH_OPENCV)
+    add_dependency("opencv")
+endif()
+
+if(WITH_FFMPEG)
+    add_dependency("ffmpeg")
+endif()
+
+
+add_include("include")
+add_lib("mlib" "src" "include")
+create_cmake_module("mlib")
 
 if(BUILD_EXAMPLES)
-
-    file(GLOB examples_list "examples/*.cpp")
-
-    FOREACH(ex ${examples_list})
-        string(REGEX REPLACE "^.*/(.+).cpp" "\\1" ex_name ${ex})
-        add_executable( ${ex_name} ${ex} )
-        target_link_libraries( ${ex_name} "mlib" )
-    ENDFOREACH()
-
+    add_dependency("mlib")
+    add_apps("examples")
 endif()
+
+set_solution("mlib")

@@ -1,5 +1,5 @@
 
-macro(add_static_library project_name)
+macro(add_lib project_name)
     project(${project_name} CXX)
 
     set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib/")

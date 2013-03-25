@@ -1,9 +1,10 @@
 
-macro(set_dependency)
-
+macro(clear_dependency)
   unset(target_global_list_libs)
   set(target_global_list_libs)
-  
+endmacro()
+
+macro(add_dependency)
   set(target_use_qt FALSE)
   
   foreach(arg ${ARGV})
@@ -31,6 +32,9 @@ macro(set_dependency)
       find_package(WebP REQUIRED)
       list(APPEND target_global_list_libs ${WEBP_LIBRARIES})
 
+    elseif(arg STREQUAL "mlib")
+      find_package(mlib REQUIRED)
+      list(APPEND target_global_list_libs ${MLIB_LIBS})
 
     elseif(arg STREQUAL "sdl")
       find_package(SDL REQUIRED)

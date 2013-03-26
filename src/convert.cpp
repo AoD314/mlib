@@ -3,6 +3,13 @@
 
 namespace mlib
 {
+    std::string to_str(bool t)
+    {
+        std::stringstream ss;
+        ss << ((t == true)? "true" : "false");
+        return ss.str();
+    }
+
 	std::string size_to_str(const size_t size_in_byte)
 	{
 		if (size_in_byte < 1024)

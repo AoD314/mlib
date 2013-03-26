@@ -8,6 +8,9 @@
 
 namespace mlib
 {
+    //! Convert bool value to "true" or "false"
+    std::string to_str(bool t);
+
 	//! Convert Type to std::string
 	template <typename T>
 	std::string to_str(const T & t, int align = 0, int precision = 0, char c = ' ')

@@ -1,7 +1,35 @@
 
 #include "mlib/processor.hpp"
+#include "mlib/memory.hpp"
 
 #include <iostream>
+
+/*!
+ Inline assembly
+ GCC provides the special construct "asm" for inline assembly, which has the following format:
+
+ \code
+    asm ( assembler template
+        : output operands               (optional)
+        : input operands                (optional)
+        : list of clobbered registers   (optional)
+        );
+ \endcode
+ \par
+ In this example, the assembler template consists of assembly instructions.
+ The input operands are the C expressions that serve as input operands to the instructions.
+ The output operands are the C expressions on which the output of the assembly instructions will be performed.
+
+ \code asm ("movl %%cr3, %0\n" :"=r"(cr3val)); \endcode
+
+ \li \c a  \%eax
+ \li \c b  \%ebx
+ \li \c c  \%ecx
+ \li \c d  \%edx
+ \li \c S  \%esi
+ \li \c D  \%edi
+*/
+
 
 namespace mlib
 {
@@ -80,11 +108,10 @@ namespace mlib
 			__cpuid(b,1);
 			_edx = b[3];
 		#elif defined __linux__ || defined __APPLE__
-			register volatile unsigned int func = 1, _eax, _ecx;
-			asm volatile ( "cpuid\n" : "=a" (_eax), "=d" (_edx), "=c" (_ecx) : "a" (func));
+            asm volatile ( "movl $1, %%eax\n\tcpuid\n" : "=d" (_edx));
 		#endif
 
-		return ((_edx & (static_cast<unsigned int>(1) << bit)) >> bit) == 0;
+        return ((_edx & (static_cast<unsigned int>(1) << bit)) >> bit) == 1;
 	}
 
 	bool Processor::is_set_N_bit_in_ECX(unsigned int bit)
@@ -96,12 +123,31 @@ namespace mlib
 			__cpuid(b,1);
 			_ecx = b[2];
 		#elif defined __linux__ || defined __APPLE__
-			register volatile unsigned int func = 1, _eax, _edx;
-			asm volatile ("cpuid\n" : "=a" (_eax), "=d" (_edx), "=c" (_ecx) : "a" (func));
+            asm volatile ("movl $1, %%eax\n\tcpuid\n" : "=c" (_ecx) : "a" (1));
 		#endif
 
-		return ((_ecx & (static_cast<unsigned int>(1) << bit)) >> bit) == 0;
+        return ((_ecx & (static_cast<unsigned int>(1) << bit)) >> bit) == 1;
 	}
+
+    bool Processor::is_set_N_bit_in_EBX(unsigned int bit)
+    {
+        register volatile unsigned int _ebx;
+
+        #if defined WIN32 || defined _WIN32 || defined WINCE
+            int b[4];
+            __cpuid(b,1);
+            _ebx = b[1];
+        #elif defined __linux__ || defined __APPLE__
+            asm volatile ("movl $1, %%eax\n\tcpuid\n" : "=b" (_ebx) : "a" (1));
+        #endif
+
+        return ((_ebx & (static_cast<unsigned int>(1) << bit)) >> bit) == 1;
+    }
+
+    bool Processor::supportFMA()
+    {
+        return is_set_N_bit_in_ECX(12);
+    }
 
 	bool Processor::supportSSE()
 	{
@@ -137,6 +183,11 @@ namespace mlib
 	{
 		return is_set_N_bit_in_ECX(28);
 	}
+
+    bool Processor::supportAVX2()
+    {
+        return is_set_N_bit_in_EBX(5);
+    }
 
 	bool Processor::supportAES()
 	{

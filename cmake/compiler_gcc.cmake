@@ -3,12 +3,12 @@
 
 if(CXX_GCC)
     exec_program(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE _compiler_output)
-    string(REGEX REPLACE ".* ([0-9]\\.[0-9]\\.[0-9]) .*" "\\1" gcc_compiler_version ${_compiler_output})
+    string(REGEX REPLACE ".* ([0-9]\\.[0-9]\\.[0-9])" "\\1" gcc_compiler_version ${_compiler_output})
     message(STATUS "C++ compiler version: ${gcc_compiler_version} [${CMAKE_CXX_COMPILER}]")
 
     if(${ENABLE_WARNINGS_ARE_ERRORS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ")
-        set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -std=c++11 ")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror ")
+        set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -Werror ")
     endif()
 
     if(${ENABLE_C++11})

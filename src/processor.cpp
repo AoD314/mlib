@@ -40,7 +40,7 @@ namespace mlib
 			GetSystemInfo( &sysinfo );
 			return (int)sysinfo.dwNumberOfProcessors;
 		#elif defined __linux__
-			return (int)sysconf( _SC_NPROCESSORS_ONLN );
+            return static_cast<int>(sysconf(_SC_NPROCESSORS_ONLN));
 		#elif defined __APPLE__
 			int numCPU=0;
 			int mib[4];

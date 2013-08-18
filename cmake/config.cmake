@@ -15,5 +15,7 @@ endmacro()
 
 macro(create_config file_name)
 	status("Parsing ${file_name}")
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${file_name}.cmake" "${file_name}")
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${file_name}.cmake.in" "${file_name}")
+	list(APPEND PROJECT_INCLUDE_DIRS "\"${CMAKE_BINARY_DIR}\"")
+	status("add to include: ${CMAKE_BINARY_DIR}")
 endmacro()

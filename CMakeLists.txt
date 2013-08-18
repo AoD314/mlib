@@ -24,12 +24,12 @@ if(WITH_VPX)
     add_dependency("vpx")
 endif()
 
-add_include("include")
-add_lib("mlib" "src" "include")
+add_dir_inc("include")
+add_lib_shared("mlib" "src" "include")
 create_cmake_module("mlib")
 
 if(BUILD_EXAMPLES)
-    add_dependency("mlib")
+    add_local_dependency("mlib")
     add_apps("examples")
 endif()
 

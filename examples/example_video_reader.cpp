@@ -53,11 +53,11 @@ int main(int argc, char ** argv)
     std::string filename = parser.get<std::string>("i");
 
     VideoReader reader(filename);
-    //Timer t;
+    Timer t;
 
     size_t index = 0;
 
-    //t.start();
+    t.start();
 
     while(true)
     {
@@ -74,13 +74,12 @@ int main(int argc, char ** argv)
         //if (index % 10 == 0) std::cout << std::endl;
     }
 
-    //t.stop();
+    t.stop();
 
-    /*
     std::cout << "read " << index << " frames in "
               << t.get_total_time_in_seconds() << " sec   FPS: "
               << static_cast<double>(index) / t.get_total_time_in_seconds();
-    */
+
     std::cout << std::endl;
 
     return 0;

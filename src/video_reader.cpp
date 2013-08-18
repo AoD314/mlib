@@ -7,13 +7,11 @@
 #include "mlib/exception.hpp"
 #include "mlib/processor.hpp"
 
-
-
 namespace mlib
 {
     VideoReader::VideoReader(const std::string& filename)
-    :   avformat_context(0), avcodec_context(0), avcodec(0),
-        avframe_native(0), avframe_rgb(0),
+    : avformat_context(0), avcodec_context(0), avcodec(0),
+      avframe_native(0), avframe_rgb(0), img_convert_ctx(0),
         video_stream(-1)
     {
         av_register_all();
@@ -57,6 +55,17 @@ namespace mlib
 
         // Allocate video frame
         avframe_native = avcodec_alloc_frame();
+
+        img_convert_ctx = sws_getCachedContext(NULL,
+                                 avcodec_context->width,
+                                 avcodec_context->height,
+                                 avcodec_context->pix_fmt,
+                                 avcodec_context->width,
+                                 avcodec_context->height,
+                                 PIX_FMT_BGR24,
+                                 SWS_BILINEAR,
+                                 NULL, NULL, NULL
+                              );
     }
 
     VideoReader::VideoReader(const VideoReader& reader)
@@ -65,6 +74,7 @@ namespace mlib
         avcodec(0),
         avframe_native(0),
         avframe_rgb(0),
+        img_convert_ctx(0),
         video_stream(-1) {}
 
     VideoReader& VideoReader::operator=(const VideoReader &reader)
@@ -84,15 +94,18 @@ namespace mlib
 
         while(true)
         {
-            if (av_read_frame(avformat_context, &packet) < 0)
-            {
-                count_errs++;
-                continue;
-            }
-
             if (count_errs > max_number_of_attempts)
             {
                 break;
+            }
+
+            if (av_read_frame(avformat_context, &packet) < 0)
+            {
+                // Free the packet that was allocated by av_read_frame
+                av_free_packet(&packet);
+
+                count_errs++;
+                continue;
             }
 
             if(packet.stream_index == video_stream)
@@ -117,27 +130,6 @@ namespace mlib
                     avframe_rgb->width  = avframe_native->width;
                     avframe_rgb->height = avframe_native->height;
 
-                    /*struct SwsContext * img_convert_ctx =
-
-
-                    sws_getContext(
-                                     avcodec_context->width,
-                                     avcodec_context->height,
-                                     avcodec_context->pix_fmt,
-                                     avcodec_context->width,
-                                     avcodec_context->height,
-                                     PIX_FMT_BGR24,
-                                     SWS_BICUBIC,
-                                     NULL, NULL, NULL
-                                  );
-
-
-                    if (img_convert_ctx == NULL)
-                    {
-                        Error("Cannot initialize the conversion context!");
-                    }
-
-
                     sws_scale(
                                 img_convert_ctx,
                                 avframe_native->data,
@@ -148,37 +140,19 @@ namespace mlib
                                 avframe_rgb->linesize
                              );
 
-
-                    sws_freeContext(img_convert_ctx);
-                    */
-
-                    // Convert the image from its native format to RGB
-                    // img_convert( reinterpret_cast<AVPicture *>(avframe_rgb), PIX_FMT_RGB24, reinterpret_cast<AVPicture*>(avframe_native),
-                    //              avcodec_context->pix_fmt, avcodec_context->width, avcodec_context->height);
                     av_free(avframe_rgb);
+                    av_free_packet(&packet);
 
                     return Image(
-                                   static_cast<size_t>              (avcodec_context->width),
-                                   static_cast<size_t>              (avcodec_context->height),
+                                   static_cast<size_t>(avcodec_context->width),
+                                   static_cast<size_t>(avcodec_context->height),
                                    reinterpret_cast<unsigned char *>(buffer),
                                    avframe_rgb->linesize[0],
                                    false
                                 );
                 }
-                else
-                {
-                    count_errs ++;
-                    if (count_errs > max_number_of_attempts)
-                    {
-                            break;
-                    }
-                }
-
             }
         }
-
-        // Free the packet that was allocated by av_read_frame
-        av_free_packet(&packet);
 
         return Image(0, 0);
     }
@@ -238,6 +212,8 @@ namespace mlib
 
     VideoReader::~VideoReader()
     {
+        sws_freeContext(img_convert_ctx);
+
         avcodec_close(avcodec_context);
 
         avformat_close_input(&avformat_context);

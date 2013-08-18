@@ -4,6 +4,7 @@ include(cmake/general.cmake)
 
 set_option(WITH_FFMPEG          "Build library with FFmpeg"               OFF )
 set_option(WITH_WEBP            "Build library with WebP"                 ON  )
+set_option(WITH_VPX             "Build library with libvpx"               ON  )
 
 set_option(BUILD_EXAMPLES       "Build Examples"                          ON  )
 set_option(BUILD_TESTS          "Build Tests"                             ON  )
@@ -17,6 +18,10 @@ endif()
 
 if(WITH_WEBP)
     add_dependency("webp")
+endif()
+
+if(WITH_VPX)
+    add_dependency("vpx")
 endif()
 
 add_include("include")

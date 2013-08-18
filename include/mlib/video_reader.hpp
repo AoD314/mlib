@@ -75,11 +75,13 @@ namespace mlib
             void print_info();
 
         private:
-            AVFormatContext * avformat_context;
-            AVCodecContext  * avcodec_context;
-            AVCodec         * avcodec;
-            AVFrame         * avframe_native;
-            AVFrame         * avframe_rgb;
+            AVFormatContext   * avformat_context;
+            AVCodecContext    * avcodec_context;
+            AVCodec           * avcodec;
+            AVFrame           * avframe_native;
+            AVFrame           * avframe_rgb;
+
+            struct SwsContext * img_convert_ctx;
 
             int video_stream;
     };

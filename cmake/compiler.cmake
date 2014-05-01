@@ -4,7 +4,7 @@
 if(NOT APPLE)
     if   ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         set(CMAKE_COMPILER_IS_GNUCXX 1)
-    endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         set(CMAKE_COMPILER_IS_GNUCC 1)
     endif()
 endif()

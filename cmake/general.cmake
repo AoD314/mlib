@@ -37,4 +37,5 @@ endmacro()
 
 include(add_library REQUIRED)
 include(add_application REQUIRED)
+include(add_documentation REQUIRED)
 include(android REQUIRED)

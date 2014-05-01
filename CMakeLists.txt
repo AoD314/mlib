@@ -8,6 +8,7 @@ set_option(WITH_VPX             "Build library with libvpx"               ON  )
 
 set_option(BUILD_EXAMPLES       "Build Examples"                          ON  )
 set_option(BUILD_TESTS          "Build Tests"                             ON  )
+set_option(BUILD_DOCUMENTATION  "Build Documentation"                     ON  )
 
 
 clear_dependency()
@@ -24,8 +25,12 @@ if(WITH_VPX)
     add_dependency("vpx")
 endif()
 
+if(BUILD_DOCUMENTATION)
+    add_documentation(docs docs/Doxyfile.in)
+endif()
+
 add_dir_inc("include")
-add_lib_shared("mlib" "src" "include")
+add_lib_shared("mlib" "src" "include/mlib")
 create_cmake_module("mlib")
 
 if(BUILD_EXAMPLES)

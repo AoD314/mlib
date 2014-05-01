@@ -1,54 +1,54 @@
 
 if(NOT COMMAND find_host_program)
-  macro(find_host_program)
-    find_program(${ARGN})
-  endmacro()
+    macro(find_host_program)
+        find_program(${ARGN})
+    endmacro()
 endif()
 
 if(EXISTS "${ANDROID_EXECUTABLE}")
-  set(ANDROID_SDK_DETECT_QUIET TRUE)
+    set(ANDROID_SDK_DETECT_QUIET TRUE)
 endif()
 
 file(TO_CMAKE_PATH "$ENV{ProgramFiles}" ProgramFiles_ENV_PATH)
 file(TO_CMAKE_PATH "$ENV{HOME}" HOME_ENV_PATH)
 
 if(CMAKE_HOST_WIN32)
-  set(ANDROID_NDK_NAME ndk-build.exe)
+    set(ANDROID_NDK_NAME ndk-build.exe)
 else()
-  set(ANDROID_NDK_NAME ndk-build)
+    set(ANDROID_NDK_NAME ndk-build)
 endif()
 
 if(CMAKE_HOST_WIN32)
-  set(ANDROID_SDK_OS windows)
+    set(ANDROID_SDK_OS windows)
 elseif(CMAKE_HOST_APPLE)
-  set(ANDROID_SDK_OS macosx)
+    set(ANDROID_SDK_OS macosx)
 else()
-  set(ANDROID_SDK_OS linux)
+    set(ANDROID_SDK_OS linux)
 endif()
 
 #find android SDK: search in ANDROID_SDK first
 find_host_program(ANDROID_EXECUTABLE
-  NAMES android.bat android
-  PATH_SUFFIXES tools
-  PATHS
+    NAMES android.bat android
+    PATH_SUFFIXES tools
+    PATHS
     ENV ANDROID_SDK
-  DOC "Android SDK location"
-  NO_DEFAULT_PATH
-  )
+    DOC "Android SDK location"
+    NO_DEFAULT_PATH
+)
 
 # Now search default paths
 find_host_program(ANDROID_EXECUTABLE
-  NAMES android.bat android
-  PATH_SUFFIXES android-sdk-${ANDROID_SDK_OS}/tools
+    NAMES android.bat android
+    PATH_SUFFIXES android-sdk-${ANDROID_SDK_OS}/tools
                 android-sdk-${ANDROID_SDK_OS}_x86/tools
                 android-sdk-${ANDROID_SDK_OS}_86/tools
                 android-sdk/tools
-  PATHS /opt
+    PATHS /opt
         "${HOME_ENV_PATH}/NVPACK"
         "$ENV{SystemDrive}/NVPACK"
         "${ProgramFiles_ENV_PATH}/Android"
-  DOC "Android SDK location"
-  )
+    DOC "Android SDK location"
+)
 
 if(ANDROID_EXECUTABLE)
   if(NOT ANDROID_SDK_DETECT_QUIET)

@@ -1,4 +1,3 @@
-
 # Status report function.
 # Automatically align right column and selects text based on condition.
 # Usage:

@@ -9,23 +9,16 @@ macro(add_app project_name)
     unset(files)
     set(files)
 
-
     foreach(arg ${ARGN})
-        if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/${arg}/")
-            list(APPEND folders ${arg})
-            status("folders += ${arg}")
+        if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
+            list(APPEND folders "${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
+            status("folders += ${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
         else()
-            list(APPEND files ${arg})
-            status("files   += ${arg}")
+            list(APPEND files "${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
+            status("files   += ${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
         endif()
     endforeach()
-  
-    status(" ")
-    status("---------------------------------------------------")
-    status("add_application:")
-    status("        name        : [${project_name}]")
-    status("        files       : [${files}]")
-    status("        folders     : [${folders}]")
+
 
     list(LENGTH folders folders_len)
     if(NOT ${folders_len} EQUAL 0)
@@ -35,11 +28,26 @@ macro(add_app project_name)
         unset(target_global_list_moc_code)
     endif()
 
-    add_executable       (${project_name} ${target_global_list_code} ${files} ${target_global_list_moc_obj})
-    target_link_libraries(${project_name} ${target_global_list_libs})
-    
-    print_status()
-    status("---------------------------------------------------")
+    list(LENGTH files files_len)
+    list(LENGTH target_global_list_code glob_files_len)
+
+    math(EXPR source_len "${files_len}+${glob_files_len}")
+
+    if(NOT ${source_len} EQUAL 0)
+        status(" ")
+        status("---------------------------------------------------")
+        status("add_application:")
+        status("        name        : [${project_name}]")
+        status("        files       : [${files}]")
+        status("        folders     : [${folders}]")
+
+        add_executable       (${project_name} ${target_global_list_code} ${files} ${target_global_list_moc_obj})
+        target_link_libraries(${project_name} ${target_global_list_libs})
+
+        print_status()
+        status("---------------------------------------------------")
+    endif()
+
     status(" ")
 endmacro()
 

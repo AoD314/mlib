@@ -1,0 +1,19 @@
+BasedOnStyle: Chromium
+AccessModifierOffset : -4
+BreakBeforeBinaryOperators: true
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializersBeforeComma: true
+ColumnLimit: 150
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+IndentFunctionDeclarationAfterType: true
+IndentWidth: 4
+NamespaceIndentation: All
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: true
+SpacesInParentheses: false
+Standard: Auto
+UseTab: Never

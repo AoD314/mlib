@@ -5,13 +5,11 @@
 
 namespace mlib
 {
-    Params::Params():
-        help_message(""),
-        def_value(""),
-        keys(),
-        number(0) { }
+    Params::Params() : help_message(""), def_value(""), keys(), number(0)
+    {
+    }
 
-    bool cmp_params(const Params & p1, const Params & p2)
+    bool cmp_params(const Params& p1, const Params& p2)
     {
         if (p1.number > p2.number)
             return true;
@@ -27,13 +25,8 @@ namespace mlib
         return false;
     }
 
-    CommandLineParser::CommandLineParser(int argc, char **argv, const std::string keys):
-        error(false),
-        error_message(""),
-        about_message(""),
-        path_to_app(""),
-        app_name(""),
-        data()
+    CommandLineParser::CommandLineParser(int argc, char** argv, const std::string keys)
+        : error(false), error_message(""), about_message(""), path_to_app(""), app_name(""), data()
     {
         size_t pos_s = std::string(argv[0]).find_last_of("/\\");
         if (pos_s == std::string::npos)
@@ -73,7 +66,6 @@ namespace mlib
 
                 data.push_back(p);
             }
-
         }
 
         // parse argv
@@ -89,7 +81,7 @@ namespace mlib
                 {
                     if (k_v[0][0] == '-')
                     {
-                        k_v[0] = k_v[0].substr(1, k_v[0].length() -1);
+                        k_v[0] = k_v[0].substr(1, k_v[0].length() - 1);
                     }
                 }
                 apply_params(k_v[0], k_v[1]);
@@ -154,16 +146,16 @@ namespace mlib
             sort(data[i].keys.begin(), data[i].keys.end());
         }
 
-        for (size_t j = 0; j < data.size();     j++)
-        for (size_t i = 0; i < data.size() - 1; i++)
-        {
-            if (cmp_params(data[i], data[i+1]))
+        for (size_t j = 0; j < data.size(); j++)
+            for (size_t i = 0; i < data.size() - 1; i++)
             {
-                Params tmp = data[i];
-                data[i] = data[i+1];
-                data[i+1] = tmp;
+                if (cmp_params(data[i], data[i + 1]))
+                {
+                    Params tmp = data[i];
+                    data[i] = data[i + 1];
+                    data[i + 1] = tmp;
+                }
             }
-        }
     }
 
     void CommandLineParser::set_error(std::string msg)
@@ -183,8 +175,7 @@ namespace mlib
         {
             for (size_t j = 0; j < data[i].keys.size(); j++)
             {
-                if (name.compare(data[i].keys[j]) == 0 &&
-                        std::string("true").compare(data[i].def_value) == 0)
+                if (name.compare(data[i].keys[j]) == 0 && std::string("true").compare(data[i].def_value) == 0)
                 {
                     return true;
                 }
@@ -211,7 +202,7 @@ namespace mlib
         {
             if (data[i].number > -1)
             {
-                std::string name = data[i].keys[0].substr(1, data[i].keys[0].length()-1);
+                std::string name = data[i].keys[0].substr(1, data[i].keys[0].length() - 1);
                 std::cout << name << " ";
             }
         }
@@ -244,7 +235,8 @@ namespace mlib
                 std::string dv = cat_string(data[i].def_value);
                 if (dv.compare("") != 0)
                 {
-                    std::cout << " (value:" << dv << ")";;
+                    std::cout << " (value:" << dv << ")";
+                    ;
                 }
 
                 std::cout << "\n\t\t" << data[i].help_message << std::endl;
@@ -265,7 +257,8 @@ namespace mlib
                 std::string dv = cat_string(data[i].def_value);
                 if (dv.compare("") != 0)
                 {
-                    std::cout << " (value:" << dv << ")";;
+                    std::cout << " (value:" << dv << ")";
+                    ;
                 }
 
                 std::cout << "\n\t\t" << data[i].help_message << std::endl;

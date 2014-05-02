@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 2.8.6)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 include(cmake/general.cmake)
 
-set_option(WITH_FFMPEG          "Build library with FFmpeg"               OFF )
+set_option(WITH_FFMPEG          "Build library with FFmpeg"               ON  )
 set_option(WITH_WEBP            "Build library with WebP"                 ON  )
 set_option(WITH_VPX             "Build library with libvpx"               ON  )
 
 set_option(BUILD_EXAMPLES       "Build Examples"                          ON  )
 set_option(BUILD_TESTS          "Build Tests"                             ON  )
-set_option(BUILD_DOCUMENTATION  "Build Documentation"                     ON  )
+set_option(BUILD_DOCUMENTATION  "Build Documentation"                     OFF )
 
 
 clear_dependency()

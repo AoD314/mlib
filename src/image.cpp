@@ -1,14 +1,13 @@
 
+#include <fstream>
+
 #include "mlib/image.hpp"
 #include "mlib/memory.hpp"
-
-#include <fstream>
 
 namespace mlib
 {
 
-    Image::Image(size_t width, size_t height)
-    : data(0), w(width), h(height), s(3 * w), size_in_byte(s * h)
+    Image::Image(size_t width, size_t height) : data(0), w(width), h(height), s(3 * w), size_in_byte(s * h)
     {
         if (size_in_byte != 0)
         {
@@ -21,8 +20,8 @@ namespace mlib
         }
     }
 
-    Image::Image(size_t width, size_t height, unsigned char * d, int linesize, bool copy_memory)
-    : data(0), w(width), h(height), s(static_cast<size_t>(linesize)), size_in_byte(s * h)
+    Image::Image(size_t width, size_t height, unsigned char* d, int linesize, bool copy_memory)
+        : data(0), w(width), h(height), s(static_cast<size_t>(linesize)), size_in_byte(s * h)
     {
         if (copy_memory == true)
         {
@@ -38,8 +37,7 @@ namespace mlib
         }
     }
 
-    Image::Image(const Image& img)
-    : data(0), w(img.w), h(img.h), s(img.s), size_in_byte(img.size_in_byte)
+    Image::Image(const Image& img) : data(0), w(img.w), h(img.h), s(img.s), size_in_byte(img.size_in_byte)
     {
         if (size_in_byte != 0)
         {
@@ -70,7 +68,7 @@ namespace mlib
         return *this;
     }
 
-    void Image::save(std::string & filename)
+    void Image::save(std::string& filename)
     {
         filename += ".ppm";
 
@@ -80,7 +78,7 @@ namespace mlib
         file << "P3" << std::endl << w << " " << h << std::endl << "255" << std::endl;
 
         // Write pixel data
-        for (size_t i = 0; i < 3 * w * h; i+=3)
+        for (size_t i = 0; i < 3 * w * h; i += 3)
         {
             file << static_cast<int>(data[i + 0]) << " ";
             file << static_cast<int>(data[i + 1]) << " ";
@@ -121,6 +119,4 @@ namespace mlib
             data = 0;
         }
     }
-
 }
-

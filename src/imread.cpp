@@ -4,7 +4,7 @@
 
 namespace mlib
 {
-    Image imread (std::string /*filename*/)
+    Image imread(std::string /*filename*/)
     {
         Error("Not implemented");
     }

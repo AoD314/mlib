@@ -4,7 +4,7 @@
 
 namespace mlib
 {
-    Image imwrite (std::string /*filename*/, Image /*img*/, unsigned char /*compress*/)
+    Image imwrite(std::string /*filename*/, Image /*img*/, unsigned char /*compress*/)
     {
         Error("Not implemented");
     }

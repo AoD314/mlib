@@ -7,9 +7,13 @@
 
 namespace mlib
 {
+    /*! \class DataTime
+    **
+    */
     class DateTime
     {
     public:
+        //! Return current date and time
         static DateTime now();
 
         std::string date_str() const;

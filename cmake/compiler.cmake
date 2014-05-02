@@ -27,7 +27,7 @@ endif()
 
 ###################################################
 
-set_option(ENABLE_C++11                 "Support C++11"                                               OFF   )
+set_option(ENABLE_C++11                 "Support C++11"                                               ON   )
 set_option(ENABLE_PROFILING             "Enable profiling in the GCC compiler (Add flags: -g -pg)"    OFF  IF (CXX_GCC) )
 set_option(ENABLE_SSE                   "Enable SSE instructions"                                     OFF  IF (CXX_INTEL OR CXX_GCC OR CXX_CLANG OR CXX_MS) )
 set_option(ENABLE_SSE2                  "Enable SSE2 instructions"                                    OFF  IF (CXX_INTEL OR CXX_GCC OR CXX_CLANG OR CXX_MS) )

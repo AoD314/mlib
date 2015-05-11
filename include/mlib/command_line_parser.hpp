@@ -15,88 +15,116 @@
 
 namespace mlib
 {
-    class Params
-    {
-    public:
-        Params();
-        std::string help_message;
-        std::string def_value;
-        std::vector<std::string> keys;
-        int number;
+    enum CMLParamType {
+        UNKNOWN = 0,
+        BOOL,
+        NUMBER,
+        VALUE
     };
 
-    bool cmp_params(const Params& p1, const Params& p2);
+    class Params
+    {
+        public:
+            Params();
+            Params(std::string ks, std::string def, std::string help, int num = -1);
+
+            bool            in(std::string key);
+            std::string     get_def() const;
+            int             get_number() const;
+            std::string     get_help() const;
+            CMLParamType    type() const;
+
+            void            set_number(int num);
+            void            set_def(std::string dv);
+
+            std::vector<std::string> get_keys();
+
+        private:
+
+
+            std::string help_message;
+            std::string def_value;
+            std::vector<std::string> keys;
+            int number;
+            CMLParamType param_type;
+    };
+
 
     class CommandLineParser
     {
-    public:
-        CommandLineParser(int argc, char** argv, const std::string keys);
+        public:
+            CommandLineParser(int argc, char** argv, const std::string keys);
 
-        std::string get_path_to_application();
+            std::string get_path_to_application();
 
-        template <typename T>
-        T get(const std::string& name, bool space_delete = true)
-        {
-            for (size_t i = 0; i < data.size(); i++)
+            template <typename T>
+            T get(const std::string& name, bool space_delete = true)
             {
-                for (size_t j = 0; j < data[i].keys.size(); j++)
-                {
-                    if (name.compare(data[i].keys[j]) == 0)
-                    {
-                        std::string v = data[i].def_value;
-                        if (space_delete == true)
-                            v = cat_string(v);
-                        return from_str<T>(v);
-                    }
-                }
-            }
-            error = true;
-            error_message += "Unknown parametes " + name + "\n";
-            return T();
-        }
+                Params * p = find_params_by_name(name);
 
-        template <typename T>
-        T get(int index, bool space_delete = true)
-        {
-            for (size_t i = 0; i < data.size(); i++)
-            {
-                if (data[i].number == index)
+                if (p != nullptr)
                 {
-                    std::string v = data[i].def_value;
+                    std::string v = p->get_def();
                     if (space_delete == true)
+                    {
                         v = cat_string(v);
+                    }
+
                     return from_str<T>(v);
                 }
+
+                error = true;
+                error_message += "Unknown parametes " + name + "\n";
+                return T();
             }
-            error = true;
-            error_message += "Unknown parametes #" + to_str<int>(index) + "\n";
-            return T();
-        }
 
-        bool has(const std::string& name);
+            template <typename T>
+            T get(int index, bool space_delete = true)
+            {
+                Params * p = find_params_by_number(index);
 
-        bool check();
+                if (p != nullptr)
+                {
+                    std::string v = p->get_def();
+                    if (space_delete == true)
+                    {
+                        v = cat_string(v);
+                    }
 
-        void set_error(std::string msg);
+                    return from_str<T>(v);
+                }
 
-        void about(std::string message);
+                error = true;
+                error_message += "Unknown parametes #" + to_str<int>(index) + "\n";
+                return T();
+            }
 
-        void print_help();
+            bool has(const std::string& name);
 
-    protected:
-        bool error;
-        std::string error_message;
-        std::string about_message;
 
-        std::string path_to_app;
-        std::string app_name;
+            void about(std::string message);
 
-        std::vector<Params> data;
+            void print_help();
+            void print_errors();
+            bool is_error();
 
-        void apply_params(std::string key, std::string value);
-        void apply_params(int i, std::string value);
+        private:
+            bool error;
+            std::string error_message;
+            std::string about_message;
 
-        void sort_params();
+            std::string path_to_app;
+            std::string app_name;
+
+            std::vector<Params> data;
+
+            void apply_params(std::string key, std::string value);
+            void apply_params(int i, std::string value);
+
+            void setup_apps(std::string app);
+            std::string clear_params(std::string param);
+            Params * find_params_by_name(std::string name);
+            Params * find_params_by_number(int num);
     };
 }
 

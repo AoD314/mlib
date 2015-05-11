@@ -8,8 +8,9 @@ using std::cout;
 using std::endl;
 
 const std::string keys(
-    "{help h usage |  | print help information}"
-    "{test t       |20| test value = 20       }"
+    "{help h usage |  | print help information     }"
+    "{:test t      |20| test value }"
+    "{@img         | img.png | path_to_image }"
 );
 
 int main(int argc, char ** argv)
@@ -18,11 +19,19 @@ int main(int argc, char ** argv)
 
     if (parser.has("help"))
     {
+        parser.about("CommandLineParser example v0.1");
         parser.print_help();
         return 0;
     }
 
     int x = parser.get<int>("test");
+
+    if (parser.is_error())
+    {
+        parser.print_errors();
+        return 0;
+    }
+
     cout << "x = " << x << endl;
 
     return 0;

@@ -21,25 +21,22 @@ namespace mlib
         return ss.str();
     }
 
+
+
     //! Parse Type from std::string
     template <typename T>
-    T from_str(const std::string& val, bool throw_exception = true, T defval = T())
+    T from_str(const std::string& val, T defval = T())
     {
         std::istringstream iss(val);
         T t = T();
         bool result = iss >> t;
-        if (!result && throw_exception)
-            throw std::exception();
-        if (!result && !throw_exception)
+        if (!result)
             return defval;
         return t;
     }
 
-    //! Formating size to std::string
-    std::string size_to_str(const size_t size_in_byte);
 
-    //! Formating time to std::string
-    std::string time_to_str(const double time_in_sec);
+
 }
 
 #endif

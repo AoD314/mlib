@@ -1,6 +1,7 @@
 
 #include "mlib/timer.hpp"
 #include "mlib/convert.hpp"
+#include "mlib/formatter.hpp"
 
 #include <limits>
 
@@ -206,7 +207,7 @@ namespace mlib
         }
         else if (t.mode_p == inAll)
         {
-            out << time_to_str(t.get_total_time_in_seconds());
+            out << mlib::Print::time(t.get_total_time_in_mseconds());
         }
 
         return out;

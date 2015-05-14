@@ -189,3 +189,14 @@ TEST(command_line_parser, get_string_without_set)
 
     ASSERT_EQ("", parser.get<std::string>("f"));
 }
+
+TEST(command_line_parser, get_string_with_space)
+{
+    int argc = 3;
+    char * argv [] = { "./app", "-m", "hello world!" };
+    const std::string keys("{:m ||path_to_file}");
+
+    mlib::CommandLineParser parser(argc, argv, keys);
+
+    ASSERT_EQ("hello world!", parser.get<std::string>("m"));
+}

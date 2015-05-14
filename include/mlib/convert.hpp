@@ -35,7 +35,8 @@ namespace mlib
         return t;
     }
 
-
+    template<>
+    std::string from_str<std::string>(const std::string& val, std::string defval);
 
 }
 
